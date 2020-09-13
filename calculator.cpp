@@ -197,7 +197,7 @@ void Calculator::jzzhClicked(){
                     if(c[i]!=0) x=i;
                     if(n==0) break;
                 }
-                if(x==0) display->setText(QString::number(0));
+                if(x==0) display->setText(display->text()+QString::number(0));
                 if(x!=0){
                     for(int i=1;i<=x;i++){
                         display->setText(display->text()+QString::number(c[i]));
@@ -234,7 +234,125 @@ void Calculator::jzzhClicked(){
             display->setText(QString::number(operand));
         }
     }
-    if (clickedOperator == tr("(10)转(16)")){}
+    if (clickedOperator == tr("(10)转(16)")){
+        if(zhuan2==1){
+            zhuan2=0;
+            int a[14]={0},c[11]={0};
+            int t=0,m=operand,x=0;
+            double n=operand-m;
+            if(n==0.0){
+                for(int i=13;i>0;i--){
+                    if(operand>=pow(16,i-1)){
+                        a[i]=operand/pow(16,i-1);
+                        operand=operand-a[i]*pow(16,i-1);
+                    }
+                    else if(operand<pow(16,i-1)) a[i]=0;
+                    if(a[i]!=0&&t==0) t=i;
+                }
+                if(t==0) display->setText(QString::number(0));
+                if(t!=0){
+                    if(a[t]<10) display->setText(QString::number(a[t]));
+                    else if(a[t]==10) display->setText(tr("A"));
+                    else if(a[t]==11) display->setText(tr("B"));
+                    else if(a[t]==12) display->setText(tr("C"));
+                    else if(a[t]==13) display->setText(tr("D"));
+                    else if(a[t]==14) display->setText(tr("E"));
+                    else if(a[t]==15) display->setText(tr("F"));
+                    for(int i=t-1;i>0;i--){
+                        if(a[i]<10) display->setText(display->text()+QString::number(a[i]));
+                        else if(a[i]==10) display->setText(display->text()+tr("A"));
+                        else if(a[i]==11) display->setText(display->text()+tr("B"));
+                        else if(a[i]==12) display->setText(display->text()+tr("C"));
+                        else if(a[i]==13) display->setText(display->text()+tr("D"));
+                        else if(a[i]==14) display->setText(display->text()+tr("E"));
+                        else if(a[i]==15) display->setText(display->text()+tr("F"));
+                    }
+                }
+            }
+            if(n!=0.0){
+                for(int i=13;i>0;i--){
+                    if(m>=pow(16,i-1)){
+                        a[i]=m/pow(16,i-1);
+                        m=m-a[i]*pow(16,i-1);
+                    }
+                    else if(m<pow(16,i-1)) a[i]=0;
+                    if(a[i]!=0&&t==0) t=i;
+                }
+                if(t==0) display->setText(QString::number(0));
+                if(t!=0){
+                    if(a[t]<10) display->setText(QString::number(a[t]));
+                    else if(a[t]==10) display->setText(tr("A"));
+                    else if(a[t]==11) display->setText(tr("B"));
+                    else if(a[t]==12) display->setText(tr("C"));
+                    else if(a[t]==13) display->setText(tr("D"));
+                    else if(a[t]==14) display->setText(tr("E"));
+                    else if(a[t]==15) display->setText(tr("F"));
+                    for(int i=t-1;i>0;i--){
+                        if(a[i]<10) display->setText(display->text()+QString::number(a[i]));
+                        else if(a[i]==10) display->setText(display->text()+tr("A"));
+                        else if(a[i]==11) display->setText(display->text()+tr("B"));
+                        else if(a[i]==12) display->setText(display->text()+tr("C"));
+                        else if(a[i]==13) display->setText(display->text()+tr("D"));
+                        else if(a[i]==14) display->setText(display->text()+tr("E"));
+                        else if(a[i]==15) display->setText(display->text()+tr("F"));
+                    }
+                }
+                display->setText(display->text()+tr("."));
+                for(int i=1;i<11;i++){
+                    if(n>=pow(1.0/16,i)){
+                        c[i]=n/pow(1.0/16,i);
+                        n=n-c[i]*pow(1.0/16,i);
+                    }
+                    else if(n<pow(1.0/16,i)) c[i]=0;
+                    if(c[i]!=0) x=i;
+                    if(n==0) break;
+                }
+                if(x==0) display->setText(display->text()+QString::number(0));
+                if(x!=0){
+                    for(int i=1;i<=x;i++){
+                        if(c[i]<10) display->setText(display->text()+QString::number(c[i]));
+                        else if(c[i]==10) display->setText(display->text()+tr("A"));
+                        else if(c[i]==11) display->setText(display->text()+tr("B"));
+                        else if(c[i]==12) display->setText(display->text()+tr("C"));
+                        else if(c[i]==13) display->setText(display->text()+tr("D"));
+                        else if(c[i]==14) display->setText(display->text()+tr("E"));
+                        else if(c[i]==15) display->setText(display->text()+tr("F"));
+                    }
+                }
+            }
+
+        }
+        else{
+            zhuan2=1;
+                operand=0;
+                int t=0;
+                int a[16]={0};
+                QString zfc=display->text();
+                int len=zfc.length();
+                char *str;
+                QByteArray middle=zfc.toLatin1();
+                str = middle.data();
+                for(int i=len;i>0;i--){
+                    if(str[i-1]>='A'&&str[i-1]<='F') a[i]=str[i-1]-'A'+10;
+                    else a[i]=str[i-1]-'0';
+                    if(str[i-1]=='.') t=i;
+                }
+                if(t==0){
+                    for(int i=1;i<=len;i++){
+                        operand=operand+a[i]*pow(16,len-i);
+                    }
+                }
+                if(t!=0){
+                    for(int i=1;i<t;i++){
+                        operand=operand+a[i]*pow(16,t-i-1);
+                    }
+                    for(int i=t+1,j=1;i<=len;i++,j++){
+                        operand=operand+a[i]*pow(1.0/16,j);
+                    }
+                }
+                display->setText(QString::number(operand));
+        }
+    }
 }
 //! [7]
 void Calculator::digitClicked()
@@ -289,6 +407,10 @@ void Calculator::unaryOperatorClicked()
     double result = 0.0;
 
     if(flag==0){
+        abortOperation();
+        return;
+    }
+    if(flag2==0){
         abortOperation();
         return;
     }
@@ -384,6 +506,34 @@ void Calculator::additiveOperatorClicked()
             }
         }
     }
+    if(flag2==0){
+        operand=0;
+        int t=0;
+        int a[16]={0};
+        QString zfc=display->text();
+        int len=zfc.length();
+        char *str;
+        QByteArray middle=zfc.toLatin1();
+        str = middle.data();
+        for(int i=len;i>0;i--){
+            if(str[i-1]>='A'&&str[i-1]<='F') a[i]=str[i-1]-'A'+10;
+            else a[i]=str[i-1]-'0';
+            if(str[i-1]=='.') t=i;
+        }
+        if(t==0){
+            for(int i=1;i<=len;i++){
+                operand=operand+a[i]*pow(16,len-i);
+            }
+        }
+        if(t!=0){
+            for(int i=1;i<t;i++){
+                operand=operand+a[i]*pow(16,t-i-1);
+            }
+            for(int i=t+1,j=1;i<=len;i++,j++){
+                operand=operand+a[i]*pow(1.0/16,j);
+            }
+        }
+    }
 
 //! [11] //! [12]
     if (!pendingMultiplicativeOperator.isEmpty()) {
@@ -450,6 +600,34 @@ void Calculator::multiplicativeOperatorClicked()
             }
         }
     }
+    if(flag2==0){
+        operand=0;
+        int t=0;
+        int a[16]={0};
+        QString zfc=display->text();
+        int len=zfc.length();
+        char *str;
+        QByteArray middle=zfc.toLatin1();
+        str = middle.data();
+        for(int i=len;i>0;i--){
+            if(str[i-1]>='A'&&str[i-1]<='F') a[i]=str[i-1]-'A'+10;
+            else a[i]=str[i-1]-'0';
+            if(str[i-1]=='.') t=i;
+        }
+        if(t==0){
+            for(int i=1;i<=len;i++){
+                operand=operand+a[i]*pow(16,len-i);
+            }
+        }
+        if(t!=0){
+            for(int i=1;i<t;i++){
+                operand=operand+a[i]*pow(16,t-i-1);
+            }
+            for(int i=t+1,j=1;i<=len;i++,j++){
+                operand=operand+a[i]*pow(1.0/16,j);
+            }
+        }
+    }
 
     if (!pendingMultiplicativeOperator.isEmpty()) {
         if (!calculate(operand, pendingMultiplicativeOperator)) {
@@ -497,6 +675,34 @@ void Calculator::equalClicked()
             }
         }
     }
+    if(flag2==0){
+        operand=0;
+        int t=0;
+        int a[16]={0};
+        QString zfc=display->text();
+        int len=zfc.length();
+        char *str;
+        QByteArray middle=zfc.toLatin1();
+        str = middle.data();
+        for(int i=len;i>0;i--){
+            if(str[i-1]>='A'&&str[i-1]<='F') a[i]=str[i-1]-'A'+10;
+            else a[i]=str[i-1]-'0';
+            if(str[i-1]=='.') t=i;
+        }
+        if(t==0){
+            for(int i=1;i<=len;i++){
+                operand=operand+a[i]*pow(16,len-i);
+            }
+        }
+        if(t!=0){
+            for(int i=1;i<t;i++){
+                operand=operand+a[i]*pow(16,t-i-1);
+            }
+            for(int i=t+1,j=1;i<=len;i++,j++){
+                operand=operand+a[i]*pow(1.0/16,j);
+            }
+        }
+    }
 
     if (!pendingMultiplicativeOperator.isEmpty()) {
         if (!calculate(operand, pendingMultiplicativeOperator)) {
@@ -518,58 +724,144 @@ void Calculator::equalClicked()
     }
 
     if(flag==0){
-        int a[16]={0},c[14]={0},b[16]={0,1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384};
+            int a[16]={0},c[14]={0},b[16]={0,1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384};
+            int t=0,m=sumSoFar,x=0;
+            double n=sumSoFar-m;
+            if(n==0.0){
+                for(int i=15;i>0;i--){
+                    if(sumSoFar>=b[i]){
+                        a[i]=sumSoFar/b[i];
+                        sumSoFar=sumSoFar-b[i];
+                    }
+                    else if(sumSoFar<b[i]) a[i] =0;
+                    if(a[i]!=0&&t==0) t=i;
+                }
+                if(t==0) display->setText(QString::number(0));
+                if(t!=0){
+                    display->setText(QString::number(1));
+                for(int i=t-1;i>0;i--){
+                    display->setText(display->text()+QString::number(a[i]));
+                }
+            }}
+            if(n!=0.0){
+                for(int i=15;i>0;i--){
+                    if(m>=b[i]){
+                        a[i]=m/b[i];
+                        m=m-b[i];
+                    }
+                    else if(m<b[i]) a[i]=0;
+                    if(a[i]!=0&&t==0) t=i;
+                }
+                if(t==0) display->setText(QString::number(0));
+                if(t!=0){
+                    display->setText(QString::number(1));
+                for(int i=t-1;i>0;i--){
+                    display->setText(display->text()+QString::number(a[i]));
+                }
+            }
+                display->setText(display->text()+tr("."));
+                for(int i=1;i<14;i++){
+                    if(n>=pow(1.0/2,i)){
+                        c[i]=1;
+                        n=n-pow(1.0/2,i);
+                    }
+                    else if(n<pow(1.0/2,i)) c[i]=0;
+                    if(c[i]!=0) x=i;
+                    if(n==0) break;
+                }
+                if(x==0) display->setText(QString::number(0));
+                if(x!=0){
+                    for(int i=1;i<=x;i++){
+                        display->setText(display->text()+QString::number(c[i]));
+                    }
+                }
+        }}
+
+   else if(flag2==0){
+        int a[14]={0},c[11]={0};
         int t=0,m=sumSoFar,x=0;
         double n=sumSoFar-m;
         if(n==0.0){
-            for(int i=15;i>0;i--){
-                if(sumSoFar>=b[i]){
-                    a[i]=sumSoFar/b[i];
-                    sumSoFar=sumSoFar-b[i];
+            for(int i=13;i>0;i--){
+                if(sumSoFar>=pow(16,i-1)){
+                    a[i]=sumSoFar/pow(16,i-1);
+                    sumSoFar=sumSoFar-a[i]*pow(16,i-1);
                 }
-                else if(sumSoFar<b[i]) a[i] =0;
+                else if(sumSoFar<pow(16,i-1)) a[i]=0;
                 if(a[i]!=0&&t==0) t=i;
             }
             if(t==0) display->setText(QString::number(0));
             if(t!=0){
-                display->setText(QString::number(1));
-            for(int i=t-1;i>0;i--){
-                display->setText(display->text()+QString::number(a[i]));
-            }
-        }}
-        if(n!=0.0){
-            for(int i=15;i>0;i--){
-                if(m>=b[i]){
-                    a[i]=m/b[i];
-                    m=m-b[i];
+                if(a[t]<10) display->setText(QString::number(a[t]));
+                else if(a[t]==10) display->setText(tr("A"));
+                else if(a[t]==11) display->setText(tr("B"));
+                else if(a[t]==12) display->setText(tr("C"));
+                else if(a[t]==13) display->setText(tr("D"));
+                else if(a[t]==14) display->setText(tr("E"));
+                else if(a[t]==15) display->setText(tr("F"));
+                for(int i=t-1;i>0;i--){
+                    if(a[i]<10) display->setText(display->text()+QString::number(a[i]));
+                    else if(a[i]==10) display->setText(display->text()+tr("A"));
+                    else if(a[i]==11) display->setText(display->text()+tr("B"));
+                    else if(a[i]==12) display->setText(display->text()+tr("C"));
+                    else if(a[i]==13) display->setText(display->text()+tr("D"));
+                    else if(a[i]==14) display->setText(display->text()+tr("E"));
+                    else if(a[i]==15) display->setText(display->text()+tr("F"));
                 }
-                else if(m<b[i]) a[i]=0;
-                if(a[i]!=0&&t==0) t=i;
-            }
-            if(t==0) display->setText(QString::number(0));
-            if(t!=0){
-                display->setText(QString::number(1));
-            for(int i=t-1;i>0;i--){
-                display->setText(display->text()+QString::number(a[i]));
             }
         }
-            display->setText(display->text()+tr("."));
-            for(int i=1;i<14;i++){
-                if(n>=pow(1.0/2,i)){
-                    c[i]=1;
-                    n=n-pow(1.0/2,i);
+        if(n!=0.0){
+            for(int i=13;i>0;i--){
+                if(m>=pow(16,i-1)){
+                    a[i]=m/pow(16,i-1);
+                    m=m-a[i]*pow(16,i-1);
                 }
-                else if(n<pow(1.0/2,i)) c[i]=0;
+                else if(m<pow(16,i-1)) a[i]=0;
+                if(a[i]!=0&&t==0) t=i;
+            }
+            if(t==0) display->setText(QString::number(0));
+            if(t!=0){
+                if(a[t]<10) display->setText(QString::number(a[t]));
+                else if(a[t]==10) display->setText(tr("A"));
+                else if(a[t]==11) display->setText(tr("B"));
+                else if(a[t]==12) display->setText(tr("C"));
+                else if(a[t]==13) display->setText(tr("D"));
+                else if(a[t]==14) display->setText(tr("E"));
+                else if(a[t]==15) display->setText(tr("F"));
+                for(int i=t-1;i>0;i--){
+                    if(a[i]<10) display->setText(display->text()+QString::number(a[i]));
+                    else if(a[i]==10) display->setText(display->text()+tr("A"));
+                    else if(a[i]==11) display->setText(display->text()+tr("B"));
+                    else if(a[i]==12) display->setText(display->text()+tr("C"));
+                    else if(a[i]==13) display->setText(display->text()+tr("D"));
+                    else if(a[i]==14) display->setText(display->text()+tr("E"));
+                    else if(a[i]==15) display->setText(display->text()+tr("F"));
+                }
+            }
+            display->setText(display->text()+tr("."));
+            for(int i=1;i<11;i++){
+                if(n>=pow(1.0/16,i)){
+                    c[i]=n/pow(1.0/16,i);
+                    n=n-c[i]*pow(1.0/16,i);
+                }
+                else if(n<pow(1.0/16,i)) c[i]=0;
                 if(c[i]!=0) x=i;
                 if(n==0) break;
             }
-            if(x==0) display->setText(QString::number(0));
+            if(x==0) display->setText(display->text()+QString::number(0));
             if(x!=0){
                 for(int i=1;i<=x;i++){
-                    display->setText(display->text()+QString::number(c[i]));
+                    if(c[i]<10) display->setText(display->text()+QString::number(c[i]));
+                    else if(c[i]==10) display->setText(display->text()+tr("A"));
+                    else if(c[i]==11) display->setText(display->text()+tr("B"));
+                    else if(c[i]==12) display->setText(display->text()+tr("C"));
+                    else if(c[i]==13) display->setText(display->text()+tr("D"));
+                    else if(c[i]==14) display->setText(display->text()+tr("E"));
+                    else if(c[i]==15) display->setText(display->text()+tr("F"));
                 }
             }
-    }}
+        }
+    }
 
     else display->setText(QString::number(sumSoFar));
     sumSoFar = 0.0;
@@ -595,6 +887,10 @@ void Calculator::changeSignClicked()
     double value = text.toDouble();
 
     if(flag==0){
+        abortOperation();
+        return;
+    }
+    if(flag2==0){
         abortOperation();
         return;
     }
