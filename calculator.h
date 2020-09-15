@@ -63,6 +63,7 @@ private:
     int flag2;
     int zhuan;
     int zhuan2;
+    int jzzhs;
 //! [9]
     QLineEdit *display;
 //! [9] //! [10]

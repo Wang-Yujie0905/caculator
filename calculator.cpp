@@ -18,6 +18,7 @@ Calculator::Calculator(QWidget *parent)
     flag2=1;
     zhuan=1;
     zhuan2=1;
+    jzzhs=1;
 //! [0]
 
 //! [1]
@@ -138,17 +139,39 @@ Calculator::Calculator(QWidget *parent)
 //! [6]
 
 void Calculator::twoClicked(){
-    if(flag) flag=0;
-    else flag=1;
+    if(flag){ flag=0;
+        setWindowTitle(tr("二进制模式使用中，再次点击切回十进制模式"));
+    }
+    else{ flag=1;
+        setWindowTitle(tr("宇宙第一美少女的计算器"));
+        }
 }
 void Calculator::sixteenClicked(){
-    if(flag2) flag2=0;
-    else flag2=1;
+    if(flag2){ flag2=0;
+        setWindowTitle(tr("十六进制模式使用中，再次点击切回十进制模式"));
+    }
+    else{ flag2=1;
+        setWindowTitle(tr("宇宙第一美少女的计算器"));
+        }
 }
 void Calculator::jzzhClicked(){
     Button *clickedButton = qobject_cast<Button *>(sender());
     QString clickedOperator = clickedButton->text();
     double operand = display->text().toDouble();
+    if(flag==0||flag2==0){
+        abortOperation();
+        return;
+    }
+    else if(flag==1||flag2==1){
+        if(jzzhs==1){
+            jzzhs=0;
+            setWindowTitle(tr("显示数字已实现进制转换，再次点击返回"));
+        }
+        else{
+            jzzhs=1;
+            setWindowTitle(tr("宇宙第一美少女的计算器"));
+        }
+    }
     if (clickedOperator == tr("(10)转(2)")) {
         if(zhuan==1){
             zhuan=0;
